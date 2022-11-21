@@ -50,9 +50,7 @@ class Thread extends Equatable{
   }
 
   @override
-  String toString() {
-    return "Model~Thread :: title: $title, created_at: $createdUTC";
-  }
+  bool get stringify => true;
 
   @override
   List<Object> get props => [name, title];
