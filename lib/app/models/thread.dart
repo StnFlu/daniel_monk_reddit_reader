@@ -1,13 +1,15 @@
+import 'package:equatable/equatable.dart';
+
 import '../controllers/api_controller.dart';
 
-class Thread {
-  String name, title, author, permalink;
-  int ups, downs, score, numOfComments;
-  String? url, selfText, linkFlairText;
-  DateTime createdUTC;
+class Thread extends Equatable{
+  final String name, title, author, permalink;
+  final int ups, downs, score, numOfComments;
+  final String? url, selfText, linkFlairText;
+  final DateTime createdUTC;
 
 
-  Thread({
+  const Thread({
     required this.name,
     required this.title,
     required this.author,
@@ -51,9 +53,7 @@ class Thread {
   String toString() {
     return "Model~Thread :: title: $title, created_at: $createdUTC";
   }
-  @override
-  bool operator ==(Object other) => other is Thread && other.name == name;
 
   @override
-  int get hashCode => name.hashCode;
+  List<Object> get props => [name, title];
 }
