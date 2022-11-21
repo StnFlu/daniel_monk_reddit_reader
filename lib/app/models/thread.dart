@@ -2,7 +2,7 @@ import '../controllers/api_controller.dart';
 
 class Thread {
   String name, title, author, permalink;
-  int ups, downs, numOfComments;
+  int ups, downs, score, numOfComments;
   String? url, selfText, linkFlairText;
   DateTime createdUTC;
 
@@ -14,6 +14,7 @@ class Thread {
     required this.permalink,
     required this.ups,
     required this.downs,
+    required this.score,
     required this.numOfComments,
     this.url,
     this.selfText,
@@ -37,6 +38,7 @@ class Thread {
       permalink: json['permalink'],
       ups: json['ups'],
       downs: json['downs'],
+      score: json['score'],
       numOfComments: json['num_comments'],
       url: json['url'],
       selfText: json['selftext'],
