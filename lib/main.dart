@@ -1,5 +1,5 @@
 import 'package:daniel_monk_reddit_reader/app/views/home_page.dart';
-import 'package:daniel_monk_reddit_reader/app/views/thread.dart';
+import 'package:daniel_monk_reddit_reader/app/views/thread_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       ),
       getPages: [
         GetPage(name: '/home', page: () => const HomePage()),
-        GetPage(name: '/home/thread/', page: () => const Thread()),
+        GetPage(name: '/home/thread/', page: () => const ThreadView()),
 
       ],
       initialRoute: '/home',
