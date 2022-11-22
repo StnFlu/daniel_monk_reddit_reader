@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:daniel_monk_reddit_reader/app/controllers/thread_controller.dart';
 import 'package:daniel_monk_reddit_reader/app/models/thread.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:stream_transform/stream_transform.dart';
 
@@ -37,7 +38,12 @@ class ThreadBloc extends Bloc<ThreadEvent, ThreadState> {
           hasReachedMax: false,
         ));
       }
-      final threads = await _fetchThreads(state.threads.last.name);
+      List<Thread>? threads;
+      if(state.threads.isEmpty){
+        threads = await _fetchThreads();
+      } else {
+        threads = await _fetchThreads(state.threads.last.name);
+      }
       emit(threads.isEmpty
           ? state.copyWith(hasReachedMax: true)
           : state.copyWith(
@@ -45,7 +51,11 @@ class ThreadBloc extends Bloc<ThreadEvent, ThreadState> {
         threads: List.of(state.threads)..addAll(threads),
         hasReachedMax: false,
       ));
-    } catch (_) {
+    } on DioError catch (error) {
+      if(error.type == DioErrorType.other){
+        emit(state.copyWith(status: ThreadStatus.timeout));
+        return;
+      }
       emit(state.copyWith(status: ThreadStatus.failure));
     }
   }

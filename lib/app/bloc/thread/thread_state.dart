@@ -1,6 +1,6 @@
 part of 'thread_bloc.dart';
 
-enum ThreadStatus { initial, success, failure }
+enum ThreadStatus { initial, success, timeout, failure }
 
 class ThreadState extends Equatable {
   const ThreadState({
