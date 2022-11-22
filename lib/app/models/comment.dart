@@ -6,13 +6,15 @@ class Comment extends Equatable{
   final String body, author;
   final int score;
   final DateTime createdUTC;
+  final List<Comment>? replies;
 
 
   const Comment({
     required this.author,
     required this.body,
     required this.score,
-    required this.createdUTC
+    required this.createdUTC,
+    this.replies
   });
 
   static List<Comment> fromJsonList(List list) {
@@ -28,6 +30,7 @@ class Comment extends Equatable{
       body: json['body'],
       author: json['author'],
       score: json['score'],
+      replies: json['replies'] != "" ? Comment.fromJsonList(json['replies']['data']['children']): null,
       createdUTC: DateTime.fromMillisecondsSinceEpoch((json['created_utc'] * 1000).toInt(), isUtc: true)
     );
   }
