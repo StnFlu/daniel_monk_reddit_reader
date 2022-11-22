@@ -16,6 +16,7 @@ class UpvoteDownvote extends StatelessWidget {
     )
     :
     Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         const Icon(Icons.arrow_upward),
         Padding(
