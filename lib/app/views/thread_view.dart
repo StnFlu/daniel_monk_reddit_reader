@@ -25,6 +25,7 @@ class _ThreadViewState extends State<ThreadView> {
 
   Thread? thread;
   List<Comment>? comments;
+  bool _loading = true;
 
   @override
   void initState() {
@@ -34,44 +35,65 @@ class _ThreadViewState extends State<ThreadView> {
 
   void _fetchData() async {
     if(_permaLink == null) return;
-    var response = await _threadController.getThread(permalink: _permaLink!);
-    thread = Thread.fromJson(response.data[0]['data']['children'][0]);
-    comments = Comment.fromJsonList(response.data[1]['data']['children']);
-    setState(() {
+    try {
+      var response = await _threadController.getThread(permalink: _permaLink!);
+      thread = Thread.fromJson(response.data[0]['data']['children'][0]);
+      comments = Comment.fromJsonList(response.data[1]['data']['children']);
+    } catch (error){
 
-    });
+    }
+    if(mounted) {
+      setState(() {
+        _loading = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: SingleChildScrollView(
-        child: Column(
+      body: Visibility(
+        visible: !_loading,
+        replacement: const Center(child: CircularProgressIndicator()),
+        child: Visibility(
+          visible: thread != null,
+          replacement:  Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if(thread != null)
-            ThreadFull(thread: thread!,),
-            Divider(),
-            if(comments != null)
-              ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: comments!.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CommentFull(comment: comments![index],)
-                );
-              }, separatorBuilder: (BuildContext context, int index) {
-                  return const Divider(
-                    indent: 20,
-                    endIndent: 20,
-                  );
-              },
-
-
-            )
+            const Center(child: Text('Failed to fetch posts, check your connection.')),
+            IconButton(onPressed: () => _fetchData()
+                , icon: const Icon(Icons.restart_alt))
           ],
+        ),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                if(thread != null)
+                ThreadFull(thread: thread!,),
+                const Divider(),
+                if(comments != null)
+                  ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: comments!.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CommentFull(comment: comments![index],)
+                    );
+                  }, separatorBuilder: (BuildContext context, int index) {
+                      return const Divider(
+                        indent: 20,
+                        endIndent: 20,
+                      );
+                  },
+
+
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );

@@ -28,7 +28,16 @@ class _ThreadsListState extends State<ThreadsList> {
       builder: (context, state) {
         switch (state.status) {
           case ThreadStatus.failure:
-            return const Center(child: Text('failed to fetch posts'));
+            return const Center(child: Text('Failed to fetch posts. Please try again later.'));
+          case ThreadStatus.timeout:
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Center(child: Text('Failed to fetch posts, check your connection.')),
+                IconButton(onPressed: () => context.read<ThreadBloc>().add(ThreadFetched())
+                    , icon: const Icon(Icons.restart_alt))
+              ],
+            );
           case ThreadStatus.success:
             if (state.threads.isEmpty) {
               return const Center(child: Text('no posts'));
