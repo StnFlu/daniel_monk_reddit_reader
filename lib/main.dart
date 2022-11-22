@@ -20,13 +20,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      themeMode: ThemeMode.system,
+      darkTheme:  ThemeData.dark(),
+      theme:  ThemeData.light(),
       getPages: [
         GetPage(name: '/home', page: () => const HomePage()),
         GetPage(name: '/home/thread/', page: () => const ThreadView()),
-
       ],
       initialRoute: '/home',
     );
