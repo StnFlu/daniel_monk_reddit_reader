@@ -1,6 +1,9 @@
 import 'package:daniel_monk_reddit_reader/app/models/thread.dart';
+import 'package:daniel_monk_reddit_reader/resources/shared_components/upvote_downvote.dart';
+import 'package:daniel_monk_reddit_reader/resources/shared_components/user_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'comments_icon.dart';
 
 class ThreadListItem extends StatelessWidget {
   const ThreadListItem({super.key, required this.thread});
@@ -28,22 +31,16 @@ class ThreadListItem extends StatelessWidget {
                   children: [
                     Text(thread.title, style:  textTheme.subtitle1, maxLines: 2, overflow: TextOverflow.ellipsis,),
                     Text(thread.selfText ?? "", maxLines: 3, overflow: TextOverflow.ellipsis,),
-                    Row(
-                      children: [
-                        Icon(Icons.person, color: textTheme.caption?.color,),
-                        Text(thread.author, style: textTheme.caption),
-                      ],
-                    )
+                   Row(
+                     children: [
+                       CommentsIcon(commentTotal: thread.numOfComments),
+                       UserIcon(author: thread.author),
+                     ],
+                   )
                   ],
                 ),
               ),
-              Column(
-                children: [
-                  const Icon(Icons.arrow_upward),
-                  Text(thread.score.toString()),
-                  const Icon(Icons.arrow_downward)
-                ],
-              )
+              UpvoteDownvote(score: thread.score)
             ],
           ),
         ),

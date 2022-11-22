@@ -1,10 +1,9 @@
 import 'package:daniel_monk_reddit_reader/app/controllers/thread_controller.dart';
 import 'package:daniel_monk_reddit_reader/app/models/thread.dart';
 import 'package:daniel_monk_reddit_reader/app/models/comment.dart';
+import 'package:daniel_monk_reddit_reader/resources/shared_components/thread_full.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../resources/shared_components/thread_list_item.dart';
 
 class ThreadView extends StatefulWidget {
   const ThreadView({Key? key}) : super(key: key);
@@ -46,13 +45,16 @@ class _ThreadViewState extends State<ThreadView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Column(
-        children: [
-          if(thread != null)
-          ThreadListItem(thread: thread!,),
-          if(comments != null)
-            Expanded(
-              child: ListView.builder(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            if(thread != null)
+            ThreadFull(thread: thread!,),
+            Divider(),
+            if(comments != null)
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: comments!.length,
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
@@ -62,9 +64,9 @@ class _ThreadViewState extends State<ThreadView> {
               },
 
 
-          ),
             )
-        ],
+          ],
+        ),
       ),
     );
   }
