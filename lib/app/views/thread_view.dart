@@ -1,6 +1,7 @@
 import 'package:daniel_monk_reddit_reader/app/controllers/thread_controller.dart';
 import 'package:daniel_monk_reddit_reader/app/models/thread.dart';
 import 'package:daniel_monk_reddit_reader/app/models/comment.dart';
+import 'package:daniel_monk_reddit_reader/resources/shared_components/comment_full.dart';
 import 'package:daniel_monk_reddit_reader/resources/shared_components/thread_full.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -52,15 +53,20 @@ class _ThreadViewState extends State<ThreadView> {
             ThreadFull(thread: thread!,),
             Divider(),
             if(comments != null)
-              ListView.builder(
+              ListView.separated(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: comments!.length,
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text(comments![index].score.toString()),
+                  child: CommentFull(comment: comments![index],)
                 );
+              }, separatorBuilder: (BuildContext context, int index) {
+                  return const Divider(
+                    indent: 20,
+                    endIndent: 20,
+                  );
               },
 
 
